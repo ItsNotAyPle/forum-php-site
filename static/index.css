@@ -1,0 +1,38 @@
+a, a:hover, a:focus, a:active {
+      text-decoration: none;
+      color: inherit;
+}
+
+.section {
+
+    
+}
+
+.forum-wrapper {
+    border: 2px solid blue;
+    width: 20%;
+    margin-left: 1%;
+    padding: 0.4%;
+    
+}
+
+.forum-wrapper:hover {
+    border: 2px solid black;
+    background-color: cyan;
+}
+
+.forum {
+    display: flex;
+    flex-direction: row;
+}
+
+.forum h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.forum p {
+    margin-top: 0;
+    margin-left: 5%;
+    margin-bottom: 0;
+}
