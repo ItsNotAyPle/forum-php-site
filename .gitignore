@@ -1,2 +1,3 @@
 phpmyadmin/
 .vscode/
+utils/db.php
