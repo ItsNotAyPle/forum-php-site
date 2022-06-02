@@ -3,7 +3,7 @@
 function sqlinit() {
     $servername = 'localhost';
     $username   = 'root';
-    $password   = '';
+    $password   = 'password';
     $database   = 'forum_site_php';
 
     $conn = mysqli_connect($servername, $username, $password, $database);

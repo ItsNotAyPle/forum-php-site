@@ -25,7 +25,6 @@ if (is_logged_in()) {
     $results = mysqli_query($conn, $query);
     if (!$results) {
         echo http_response_code(500);
-        die();
     } else {
         echo http_response_code(200);
     }

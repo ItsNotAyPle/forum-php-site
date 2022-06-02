@@ -3,11 +3,12 @@
         require_once '../utils/on_login.php';
         require_once '../utils/db.php';
         
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        $conn = sqlinit();
+
+        $username = mysqli_real_escape_string($conn, $_POST['username']);
+        $password = mysqli_real_escape_string($conn, $_POST['password']);
         
         $query = "SELECT user_id, salt, password_hash FROM Users WHERE username='$username'";
-        $conn = sqlinit();
         
         $results = mysqli_query($conn, $query);
         if (!$results) die(mysqli_error($conn));

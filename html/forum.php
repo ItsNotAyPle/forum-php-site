@@ -1,16 +1,68 @@
 <?php
 
+function fetch_forum_id($conn, $name) {
+    $query = "SELECT forum_id FROM Forums WHERE forum_name='$name'";
+    return mysqli_query($conn, $query);
+}
 
 require_once '../utils/db.php';
+
+?>
+
+<?php if(isset($_GET['forum_name']) && isset($_GET['create_post'])): ?>
+<?php
+$conn = sqlinit();
+$name = mysqli_real_escape_string($conn, $_GET['forum_name']);
+$results = fetch_forum_id($conn, $name);
+if (!$results) die(mysqli_error($conn));
+
+$id = mysqli_fetch_row($results)[0];
+if ($id == NULL) {
+    header("Location: /");
+}
+
+
+?>
+
+    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style><?php include_once '../static/globals.css'; ?></style>
+    <style><?php include_once '../static/new_post.css'; ?></style>
+    <title>New post</title>
+</head>
+<body>        
+    <div id="submit-wrapper">
+        <h1><?php echo $name; ?></h1>
+        <p>Make a post</p>
+        <div id="form-area">
+            <form name="submit_form" action="/api/new_post.php" method="POST">
+                <input type="hidden" name="forum_id" value="<?php echo $id; ?>">
+                <input type="text" name="title" placeholder="title">
+                <textarea name="content" rows="40" placeholder="Content..."></textarea>
+                <input name="submit" type="submit">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+            
+<?php else: ?>
+<?php
+
+
 
 if (isset($_GET['forum_name'])) {
     $name = $_GET['forum_name'];
     $data = array();
     $i = 0;
 
-    $query = "SELECT forum_id FROM Forums WHERE forum_name='$name'";
     $conn = sqlinit();
-    $result = mysqli_query($conn, $query);
+    $result = fetch_forum_id($conn, $_GET['forum_name']);
 
     $forum_id = mysqli_fetch_row($result)[0]; 
     if (!forum_id) header("Location: /index.php");
@@ -38,8 +90,6 @@ if (isset($_GET['forum_name'])) {
         $data['posts'][$i]['datetime_created'] = $time_created;
     }
 
-    // echo json_encode($data);
-    // var_dump($data);
 
 } else {
     header("Location: /index.php");
@@ -64,6 +114,8 @@ if (isset($_GET['forum_name'])) {
     <div id="forum-name">
         <h1><?php echo $name; ?></h1>
     </div>
+
+    <a href='/forum.php?forum_name=<?php echo $name; ?>&create_post=1'>Create new post</a>
     
     <?php
 
@@ -81,8 +133,7 @@ if (isset($_GET['forum_name'])) {
 
     }
 
-    foreach ($data['posts'] as $key => $post) {
-        //echo json_encode($data);
+    foreach ($data['posts'] as $post) {
         $post_id = $post['post_id'];
         $user = $post['username'];
         $title = $post['title'];
@@ -94,3 +145,5 @@ if (isset($_GET['forum_name'])) {
 
 </body>
 </html>
+
+<?php endif; ?>
