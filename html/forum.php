@@ -6,13 +6,19 @@ function fetch_forum_id($conn, $name) {
 }
 
 require_once '../utils/db.php';
+require_once '../utils/is_logged_in.php';
 
 ?>
 
 <?php if(isset($_GET['forum_name']) && isset($_GET['create_post'])): ?>
 <?php
+
+$forum_name = $_GET['forum_name'];
+
+if (!is_logged_in()) die(header("Location: forum.php?forum_name=$forum_name"));
+
 $conn = sqlinit();
-$name = mysqli_real_escape_string($conn, $_GET['forum_name']);
+$name = mysqli_real_escape_string($conn, $forum_name);
 $results = fetch_forum_id($conn, $name);
 if (!$results) die(mysqli_error($conn));
 
@@ -65,10 +71,10 @@ if (isset($_GET['forum_name'])) {
     $result = fetch_forum_id($conn, $_GET['forum_name']);
 
     $forum_id = mysqli_fetch_row($result)[0]; 
-    if (!forum_id) header("Location: /index.php");
+    if (!$forum_id) header("Location: /index.php");
     
     // select top 20 posts
-    $query = "SELECT post_id, creator_id, title, content, datetime_created FROM Posts WHERE parent_forum_id=$forum_id LIMIT 20";
+    $query = "SELECT post_id, creator_id, title, content, datetime_created FROM Posts WHERE parent_forum_id=$forum_id";
     $result = mysqli_query($conn, $query);
     if (!$result) die("Error: " . mysqli_error($conn));
 
@@ -88,6 +94,7 @@ if (isset($_GET['forum_name'])) {
         $data['posts'][$i]['title'] = $title;
         // $data['posts'][$i]['content'] = $content;
         $data['posts'][$i]['datetime_created'] = $time_created;
+        $i++;
     }
 
 
@@ -115,8 +122,11 @@ if (isset($_GET['forum_name'])) {
         <h1><?php echo $name; ?></h1>
     </div>
 
+    <?php if(is_logged_in()): ?>
     <a href='/forum.php?forum_name=<?php echo $name; ?>&create_post=1'>Create new post</a>
-    
+    <?php endif; ?>
+
+
     <?php
 
     function render_new_post($post_id, $user, $title, $time_created) {

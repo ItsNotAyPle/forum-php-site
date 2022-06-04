@@ -12,7 +12,7 @@ if (!$results) die("Failed to fetch sections");
 
 while ($row = mysqli_fetch_row($results)) {
     $section_id = $row[0];
-    $query = "SELECT forum_name FROM Forums WHERE section_id=$section_id";
+    $query = "SELECT forum_id, forum_name FROM Forums WHERE section_id=$section_id";
     $forums = mysqli_query($conn, $query);
     if (!$results) die("Failed to fetch forums");
     
@@ -21,7 +21,8 @@ while ($row = mysqli_fetch_row($results)) {
     
     $j = 0;
     while ($forum = mysqli_fetch_row($forums)) {
-        $data[$i]['forums'][$j]['forum_name'] = $forum[0];
+        $data[$i]['forums'][$j]['forum_id'] = $forum[0];
+        $data[$i]['forums'][$j]['forum_name'] = $forum[1];
         $j++;
     }
     
@@ -46,29 +47,40 @@ while ($row = mysqli_fetch_row($results)) {
 <body>
     <?php include_once '../components/navbar.php'; ?>
     
+    <div id="sections">
+
     <?php
+    die();
     function render_new_forum($name, $posts=0) {
         return <<< EOD
-        <a href="/forum.php?forum_name=$name">
+        <!-- <a href="/forum.php?forum_name=$name"> -->
             <div class='forum-wrapper'>
                 <div class='forum'>
-                    <h3>$name</h3>
-                    <p>posts: $posts</p>
+                    <p class='forum-name'>$name</p>
+                    <p class='forum-posts'>posts: $posts</p>
                 </div>
             </div>
-        </a>
+        <!-- </a> -->
         
         EOD;
     }
     
-    
     foreach($data as $section) {
         $section_name = $section['section_name'];
         echo "<div class='section'>";
-        echo "<h1>$section_name</h1>";
+        echo    "<h1>$section_name</h1>";
         
         foreach($section['forums'] as $forum) {
+            $id = $forum['forum_id'];
             $name = $forum['forum_name'];
+            $total = 0;
+            $results = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Posts  WHERE parent_forum_id=$id");
+            if ($results) {
+                $total = mysqli_fetch_assoc($results)['total'];
+                echo render_new_forum($name, $total);
+                continue;
+            } 
+            
             echo render_new_forum($name);
         }
         
@@ -76,6 +88,13 @@ while ($row = mysqli_fetch_row($results)) {
     }
     
     ?>
+    </div>
     
 </body>
 </html>
+
+<?php
+
+mysqli_close($conn);
+
+?>
