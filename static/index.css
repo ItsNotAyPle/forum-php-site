@@ -3,31 +3,60 @@ body {
 }
 
 #sections {
-    margin-left: 2vw;
-    outline: 2px solid black;
+    width: 80vw;
+    margin: 0 auto;
 }
 
-.section h1 {
-    outline: 2px solid black;
+a {
+    text-decoration: none;
+}
+
+div.section {
+    background-color: gray;
+    padding-bottom: 2vh;
+    margin-bottom: 2vh;
+    border-radius: 15px;
+}
+
+div.title {
+    background-color: orange;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    color: black;
+}
+
+div.title h1 {
     margin-bottom: 0;
+    margin-left: 0.4vw;
 }
 
-.forum-wrapper {
-    width: 25%;
-    outline: 2px solid black;
+dd.forum {
+    padding: 1%;
+    padding-bottom: 0;
+    padding-top: 0;
 }
 
-/* top right bottom left */
-div.forum {
-    padding-left: 0.2vw;
+div.forum-info {
+
 }
 
 .forum-name {
-    margin: 0;
+    margin-top: 1vh;
+    margin-bottom: 0;
+    font-size: xx-large;
+    display: inline-block;
 }
 
 .forum-posts {
-    margin: 0;
-    margin-top: 0.6vh;
-    font-size:small;
+    font-size: large;
+    display: inline-block;
+    color: rgb(167, 167, 0);
+    margin-top: 0;
+    margin-left: 0.5vw;
+    margin-bottom: 0;
+}
+
+.forum-desc {
+    font-size: large;
+    margin-top: 0;
 }

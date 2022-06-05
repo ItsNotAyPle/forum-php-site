@@ -47,49 +47,51 @@ while ($row = mysqli_fetch_row($results)) {
 <body>
     <?php include_once '../components/navbar.php'; ?>
     
-    <div id="sections">
+    <dl id="sections">
+        <?php
+            function render_new_forum($name, $description, $posts) {
+                return <<< EOD
+                    <dd class="forum">
+                        <div class="forum-info">
+                            <a href="/forum.php?forum_name=$name">
+                                <b>
+                                    <p class="forum-name">$name</p>
+                                </b>
+                            </a>
+                            <p class="forum-posts">posts: $posts</p>
+                        </div>
+                        <p class="forum-desc">$description</p>
+                    </dd>                
+                EOD;
+            }
 
-    <?php
-    die();
-    function render_new_forum($name, $posts=0) {
-        return <<< EOD
-        <!-- <a href="/forum.php?forum_name=$name"> -->
-            <div class='forum-wrapper'>
-                <div class='forum'>
-                    <p class='forum-name'>$name</p>
-                    <p class='forum-posts'>posts: $posts</p>
-                </div>
-            </div>
-        <!-- </a> -->
-        
-        EOD;
-    }
-    
-    foreach($data as $section) {
-        $section_name = $section['section_name'];
-        echo "<div class='section'>";
-        echo    "<h1>$section_name</h1>";
-        
-        foreach($section['forums'] as $forum) {
-            $id = $forum['forum_id'];
-            $name = $forum['forum_name'];
-            $total = 0;
-            $results = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Posts  WHERE parent_forum_id=$id");
-            if ($results) {
-                $total = mysqli_fetch_assoc($results)['total'];
-                echo render_new_forum($name, $total);
-                continue;
-            } 
             
-            echo render_new_forum($name);
-        }
-        
-        echo "</div>";
-    }
-    
-    ?>
-    </div>
-    
+            foreach($data as $section) {
+                $section_name = $section['section_name'];
+                echo "<div class='section'>";
+                echo "<div class='title'>";
+                    echo "<h1>$section_name</h1>";
+                echo "</div>";
+
+                foreach($section['forums'] as $forum) {
+                    $id = $forum['forum_id'];
+                    $name = $forum['forum_name'];
+                    $total = 0;
+                    $results = mysqli_query($conn, "SELECT COUNT(*) AS total FROM Posts  WHERE parent_forum_id=$id");
+                    if ($results) {
+                        $total = mysqli_fetch_assoc($results)['total'];
+                        echo render_new_forum($name, "", $total);
+                        continue;
+                    } 
+                    
+                    echo render_new_forum($name, "", 0);
+                }
+
+                echo "</div>";
+            }
+        ?>
+        </div>
+    </dl>
 </body>
 </html>
 

@@ -48,10 +48,13 @@
             <a class="link" href="/signup.php">Signup</a>
         </li>
 
+        
+
         <?php else: ?>
         <li>
             <p>Welcome <?php echo $_SESSION['username']; ?>!</p>
         </li>
         <?php endif; ?>
+        
     </ul>
 </div>

@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS Sections (
 CREATE TABLE IF NOT EXISTS Forums (
     `forum_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     `forum_name` VARCHAR(50) NOT NULL,
+    `forum_description` TEXT NOT NULL,
     `section_id` TINYINT NOT NULL,
     `datetime_created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (section_id) REFERENCES Sections(id)  
