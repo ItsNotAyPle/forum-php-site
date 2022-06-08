@@ -85,11 +85,14 @@ if (isset($_GET['forum_name'])) {
         $content = $row[3];
         $time_created = $row[4];
 
-        $query = "SELECT username from Users WHERE user_id='$user_id'";
+        $query = "SELECT user_id, username from Users WHERE user_id='$user_id'";
         $results = mysqli_query($conn, $query);
-        $username = mysqli_fetch_row($results)[0];
+        $user_data = mysqli_fetch_row($results);
+        $user_id = $user_data[0];
+        $username = $user_data[1];
 
         $data['posts'][$i]['post_id'] = $post_id;
+        $data['posts'][$i]['user_id'] = $user_id;
         $data['posts'][$i]['username'] = $username;
         $data['posts'][$i]['title'] = $title;
         // $data['posts'][$i]['content'] = $content;
@@ -125,34 +128,35 @@ if (isset($_GET['forum_name'])) {
     <?php if(is_logged_in()): ?>
     <a href='/forum.php?forum_name=<?php echo $name; ?>&create_post=1'>Create new post</a>
     <?php endif; ?>
-
-
+    
+    <div id="posts">
+        
     <?php
 
-    function render_new_post($post_id, $user, $title, $time_created) {
+    function render_new_post($post_id, $user_id, $user, $title, $time_created) {
         return <<< EOD
-        <a href='/post.php?id=$post_id'>
-            <div class='post'>
-                <h1 class='post-title'>$title</h1>
-                <div class='post-text'>
-                    <p>created by: <b>$user</b> at <b>$time_created</b></p>
-                </div>
+        <div class='post'>
+            <h1 class='post-title'><a href='/post.php?id=$post_id'>$title</a></h1>
+            <div class='post-text'>
+                <p>created by: <a href='/user.php?id=$user_id'><b>$user</b></a> at <b>$time_created</b></p>
             </div>
-        </a>
+        </div>
         EOD;
-
+        
     }
 
     foreach ($data['posts'] as $post) {
         $post_id = $post['post_id'];
+        $user_id = $post['user_id'];
         $user = $post['username'];
         $title = $post['title'];
         $time_created = $post['datetime_created'];
-        echo render_new_post($post_id, $user, $title, $time_created);
+        echo render_new_post($post_id, $user_id, $user, $title, $time_created);
     }
 
     ?>
 
+    </div>
 </body>
 </html>
 

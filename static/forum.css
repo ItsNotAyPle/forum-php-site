@@ -1,0 +1,46 @@
+body {
+    /* background-image: linear-gradient(to bottom, black, rgb(12, 12, 12)); */
+    background-color: black;/post.php
+}
+
+a {
+    color: inherit;
+}
+
+#posts {
+    display: grid;
+    justify-content: center;
+}
+
+.post {
+    width: 70vw;
+    height: fit-content;
+    background-color: rgb(0, 129, 64);
+    padding: 2%;
+    margin-bottom: 2vh;
+    outline: 3px solid rgb(29, 29, 206);
+}
+
+.post-title {
+    width: fit-content;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 2vw;
+    color: black;
+}
+
+.post-text {
+    width: fit-content;
+    margin-top: 0;
+    font-size: 1vw;
+}
+
+.post-text p {
+    margin-top: 0;
+    color: white;
+}
+
+.post-text > a {
+    margin-top: 0;
+    color: white;
+}
